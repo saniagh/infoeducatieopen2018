@@ -1,0 +1,75 @@
+body {
+    padding: 5px;
+}
+
+header {
+    padding: 5px;
+    font-size: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.max-style {
+    color: orange;
+    font-weight: 600;
+}
+
+.widget-container {
+    min-height: 300px;
+}
+
+.short-history {
+    min-width: 400px;
+    min-height: 150px;
+    border: 1px solid #ddd;
+    margin: 10px;
+}
+
+.short-history-line {
+    border-bottom: 1px solid #ddd;
+    min-height: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.short-history-line:last-child {
+    border: 0;
+}
+
+.short-history-line .left {
+    width: 60%;
+    padding: 5px;
+    font-size: 15px;
+    word-break: break-all;
+    border-right: 1px solid #ddd;
+}
+
+.short-history-line .right {
+    width: 40%;
+    padding: 5px;
+    font-size: 15px;
+    word-break: break-all;
+    text-align: right;
+}
+
+.options {
+    width: 100%;
+    border-top: 1px solid #ddd;
+}
+
+.options .header {
+    font-size: 18px;
+    margin: 5px 15px 5px 15px;
+}
+
+.options .line {
+    display: flex;
+    flex: 1;
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.options .line button {
+    font-size: 12px;
+    padding: 4px;
+}
+
