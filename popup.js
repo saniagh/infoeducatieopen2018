@@ -1,50 +1,116 @@
-let changeColor = document.getElementById('changeColor');
+window.onload = function () {
+  let recoveryKey;
 
-chrome.storage.sync.get('color', function (data) {
-  changeColor.style.backgroundColor = 'black';
-  changeColor.setAttribute('value', 'black');
-});
+  chrome.storage.sync.get('recoveryKey', function (items) {
+    recoveryKey = items.recoveryKey;
+    if (recoveryKey) {
 
-changeColor.onclick = function (element) {
-  let color = element.target.value;
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.executeScript(
-        tabs[0].id,
-        { code: 'document.body.style.background = "' + color + '";' });
+      console.log(recoveryKey);
+
+      document.getElementById('disabledRecoveryKey').value = recoveryKey;
+
+      recoveryKey = recoveryKey.replace(/['"]+/g, '');
+
+      //alert('button has been pressed');
+
+      let port = chrome.extension.connect({
+        name: 'Get User',
+      });
+      port.postMessage(recoveryKey);
+      port.onMessage.addListener(function (msg) {
+        let sites = JSON.parse(msg);
+
+        sites.sites.sort(function (a, b) {
+          let key1 = a.milis;
+          let key2 = b.milis;
+
+          if (key1 < key2)
+            return 1;
+          else if (key1 === key2)
+            return 0;
+          else return -1;
+        });
+
+        for (let i = 1; i <= 5; i++) {
+          if (sites.sites[i - 1])
+            document.getElementById(
+                `list-item-left-${i}`).innerHTML = sites.sites[i -
+            1].host;
+
+          //let time = convertMS(sites.sites[i - 1].milis);
+
+          document.getElementById(
+              `list-item-right-${i}`).innerHTML = millisToMinutesAndSeconds(
+              sites.sites[i - 1].milis);
+        }
+      });
+    }
   });
 };
+
+function millisToMinutesAndSeconds(millis) {
+  let minutes = Math.floor(millis / 60000);
+  let seconds = ((millis % 60000) / 1000).toFixed(0);
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
+
+// later for quality display
+
+function convertMS(milliseconds) {
+  let day, hour, minute, seconds;
+  seconds = Math.floor(milliseconds / 1000);
+  minute = Math.floor(seconds / 60);
+  seconds = seconds % 60;
+  hour = Math.floor(minute / 60);
+  minute = minute % 60;
+  day = Math.floor(hour / 24);
+  hour = hour % 24;
+  return {
+    day: day,
+    hour: hour,
+    minute: minute,
+    seconds: seconds,
+  };
+}
 
 function getUser() {
 
   let recoveryKey = document.getElementById('recoveryKeyInput').value;
 
-  alert('button has been pressed');
+  //alert('button has been pressed');
 
   let port = chrome.extension.connect({
     name: 'Get User',
   });
   port.postMessage(recoveryKey);
   port.onMessage.addListener(function (msg) {
-    alert(msg);
+    let sites = JSON.parse(msg);
+
+    sites.sites.sort(function (a, b) {
+      let key1 = a.milis;
+      let key2 = b.milis;
+
+      if (key1 < key2)
+        return 1;
+      else if (key1 === key2)
+        return 0;
+      else return -1;
+    });
+
+    for (let i = 1; i <= 5; i++) {
+      if (sites.sites[i - 1])
+        document.getElementById(
+            `list-item-left-${i}`).innerHTML = sites.sites[i -
+        1].host;
+
+      //let time = convertMS(sites.sites[i - 1].milis);
+
+      document.getElementById(
+          `list-item-right-${i}`).innerHTML = millisToMinutesAndSeconds(
+          sites.sites[i - 1].milis);
+    }
+
   });
-
-  /*
-   let port = chrome.extension.connect({
-   name: 'Get User',
-   });
-
-   port.postMessage({
-   message: 'getUser',
-   recoveryKey: document.getElementById('recoveryKeyInput').value,
-   });
-   */
-  /*
-   const formData = `recoveryKey=${document.getElementById(
-   'recoveryKeyInput').value}`;
-   const xhr = new XMLHttpRequest();
-   xhr.open('post', 'http://localhost/users/get-user', false);
-   xhr.send(formData);
-   */
 }
 
 document.addEventListener('DOMContentLoaded', function () {
