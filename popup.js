@@ -5,8 +5,6 @@ window.onload = function () {
     recoveryKey = items.recoveryKey;
     if (recoveryKey) {
 
-      console.log(recoveryKey);
-
       document.getElementById('disabledRecoveryKey').value = recoveryKey;
 
       recoveryKey = recoveryKey.replace(/['"]+/g, '');
@@ -47,6 +45,32 @@ window.onload = function () {
     }
   });
 };
+
+function redirectUser() {
+  let recoveryKey;
+  chrome.storage.sync.get('recoveryKey', function (items) {
+    recoveryKey = items.recoveryKey;
+    if (recoveryKey)
+      window.open(`http://localhost/${recoveryKey}`);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('statistics').addEventListener('click', redirectUser);
+});
+
+function deleteUser() {
+  let recoveryKey;
+  chrome.storage.sync.get('recoveryKey', function (items) {
+    recoveryKey = items.recoveryKey;
+    if (recoveryKey)
+      window.open(`http://localhost/delete/${recoveryKey}`);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('deleteButton').addEventListener('click',deleteUser)
+});
 
 function millisToMinutesAndSeconds(millis) {
   let minutes = Math.floor(millis / 60000);
