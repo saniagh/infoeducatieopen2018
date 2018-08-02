@@ -6,6 +6,7 @@
           integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 </head>
 <body>
+<button id="changeColor" style="height: 50px; width:50px;"></button>
 <header>
     Net<span class="max-style">Max</span>
 </header>
@@ -61,6 +62,24 @@
         </div>
         <div class="line">
             <button type="button" class="btn btn-info">Mail me my data</button>
+        </div>
+        <div class="line">
+            <div class="form-group">
+                <input type="text" class="form-control" id="recoveryKeyInput" placeholder="Recovery key">
+                <small class="form-text text-muted">
+                    If you're a returning user, paste the recovery key you previously had here.
+                </small>
+            </div>
+            <button type="submit" class="btn btn-primary" id="recoveryKeyButton">Confirm</button>
+        </div>
+        <div class="line">
+            <div class="form-group">
+                <input type="text" class="form-control" disabled value="df317ef1-2939-42ea-851a-4bdf29b57fa2"
+                       style="width: 400px">
+                <small class="form-text text-muted">
+                    This is your recovery key. Save it somewhere for when needed.
+                </small>
+            </div>
         </div>
         <div class="line">
             <button type="button" class="btn btn-danger">Erase all my data and close account</button>
