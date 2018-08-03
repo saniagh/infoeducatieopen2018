@@ -101,8 +101,6 @@ function getUser() {
 
   let recoveryKey = document.getElementById('recoveryKeyInput').value;
 
-  //alert('button has been pressed');
-
   let port = chrome.extension.connect({
     name: 'Get User',
   });
