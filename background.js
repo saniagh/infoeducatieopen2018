@@ -1,9 +1,11 @@
+const address = 'http://localhost/';
+
 chrome.extension.onConnect.addListener(function (port) {
   let oldSites;
   port.onMessage.addListener(function (msg) {
 
     const xhr = new XMLHttpRequest();
-    xhr.open('get', `http://localhost/users/get-user?recoveryKey=${msg}`,
+    xhr.open('get', `${address}users/get-user?recoveryKey=${msg}`,
         false);
     xhr.send();
 
@@ -32,7 +34,7 @@ let nowopen = [], first = true;
 
 chrome.runtime.onInstalled.addListener(function () {
   const xhr = new XMLHttpRequest();
-  xhr.open('get', 'http://localhost/users/generate-user', false);
+  xhr.open('get', `${address}users/generate-user`, false);
   xhr.send();
 
   chrome.storage.sync.set(
@@ -52,9 +54,7 @@ chrome.storage.sync.get('sites', function (items) {
 function store(host, time) {
   let storage = [], found = false;
 
-
   chrome.storage.sync.get('sites', function (items) {
-
 
     storage = items.sites;
     for (let i = 0; i < storage.length; i++) {
@@ -79,7 +79,7 @@ function store(host, time) {
         recoveryKey = recoveryKey.replace(/['"]+/g, '');
         const xhr = new XMLHttpRequest();
         xhr.open('post',
-            `http://localhost/users/update-user?recoveryKey=${recoveryKey}&sites=${JSON.stringify(
+            `${address}users/update-user?recoveryKey=${recoveryKey}&sites=${JSON.stringify(
                 storage)}`,
             false);
         xhr.send();

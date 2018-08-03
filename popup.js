@@ -1,3 +1,5 @@
+const address = 'http://localhost/';
+
 window.onload = function () {
   let recoveryKey;
 
@@ -8,8 +10,6 @@ window.onload = function () {
       document.getElementById('disabledRecoveryKey').value = recoveryKey;
 
       recoveryKey = recoveryKey.replace(/['"]+/g, '');
-
-      //alert('button has been pressed');
 
       let port = chrome.extension.connect({
         name: 'Get User',
@@ -35,8 +35,6 @@ window.onload = function () {
                 `list-item-left-${i}`).innerHTML = sites.sites[i -
             1].host;
 
-          //let time = convertMS(sites.sites[i - 1].milis);
-
           document.getElementById(
               `list-item-right-${i}`).innerHTML = millisToMinutesAndSeconds(
               sites.sites[i - 1].milis);
@@ -51,7 +49,7 @@ function redirectUser() {
   chrome.storage.sync.get('recoveryKey', function (items) {
     recoveryKey = items.recoveryKey;
     if (recoveryKey)
-      window.open(`http://localhost/${recoveryKey}`);
+      window.open(`${address}${recoveryKey}`);
   });
 }
 
@@ -64,7 +62,7 @@ function deleteUser() {
   chrome.storage.sync.get('recoveryKey', function (items) {
     recoveryKey = items.recoveryKey;
     if (recoveryKey)
-      window.open(`http://localhost/delete/${recoveryKey}`);
+      window.open(`${address}delete/${recoveryKey}`);
   });
 }
 
@@ -76,25 +74,6 @@ function millisToMinutesAndSeconds(millis) {
   let minutes = Math.floor(millis / 60000);
   let seconds = ((millis % 60000) / 1000).toFixed(0);
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-}
-
-// later for quality display
-
-function convertMS(milliseconds) {
-  let day, hour, minute, seconds;
-  seconds = Math.floor(milliseconds / 1000);
-  minute = Math.floor(seconds / 60);
-  seconds = seconds % 60;
-  hour = Math.floor(minute / 60);
-  minute = minute % 60;
-  day = Math.floor(hour / 24);
-  hour = hour % 24;
-  return {
-    day: day,
-    hour: hour,
-    minute: minute,
-    seconds: seconds,
-  };
 }
 
 function getUser() {
